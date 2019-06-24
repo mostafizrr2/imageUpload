@@ -6,13 +6,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Filters\DemoFilter;
 
 class HomeController extends Controller
 {
     
     function upload(Request $request)
     {
-        // dd($request->all());
+        // dd(public_path().'\img\watermark.png');
         $file = $request->file('image');
         $ext = $file->getClientOriginalExtension();
 
@@ -23,7 +24,12 @@ class HomeController extends Controller
            Storage::disk('public')->makeDirectory('images');
         }
 
-        $newImage = Image::make( $file )->resize(300, 200)->save($imageName);
+        $waterMark = Image::make(public_path().'\img\watermark.png')->resize(550,100); 
+
+        $newImage = Image::make( $file )
+        ->resize(500,200)
+        // ->fit(500)
+        ->save($imageName,80);
 
         // dd($newImage);
 
